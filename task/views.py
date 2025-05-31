@@ -29,3 +29,13 @@ def task_create(request):
     context = {'task_form': task_form}
 
     return render(request, 'task_form.html', context)
+
+@login_required
+def task_update(request, pk):
+    task = Task.objects.get(pk=pk, user=request.user)
+    update_form = TaskForms(request.POST or None, instance=task)
+    if update_form.is_valid():
+        update_form.save()
+        return redirect('task-list')
+    context = {'update_form':update_form}
+    return render(request, 'task_update.html', context)

@@ -7,12 +7,15 @@
 </head>
 <body>
     <h2>My Task</h2>
+    <a href="{% url 'task-create' %}">Create Task</a>
+
     <ul>
         {% for task in task_list %}
 
         <li>{{ task.title}} - {% if task.completed %} ✅ {% else %}  ❌ {% endif %}</li>
-
+        <a href="{% url 'task-update' task.pk %}">✏️</a>
         {% endfor %}
     </ul>
+
 </body>
 </html>
