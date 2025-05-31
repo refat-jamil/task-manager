@@ -39,3 +39,11 @@ def task_update(request, pk):
         return redirect('task-list')
     context = {'update_form':update_form}
     return render(request, 'task_update.html', context)
+
+
+def task_delete(request, pk):
+    delete_task = Task.objects.get(pk=pk, user=request.user)
+    if request.method == "POST":
+        delete_task.delete()
+        return redirect('task-list')
+    return render(request, 'task/task_confirm_delete.html', {'task': delete_task})

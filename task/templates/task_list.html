@@ -14,6 +14,8 @@
 
         <li>{{ task.title}} - {% if task.completed %} ✅ {% else %}  ❌ {% endif %}</li>
         <a href="{% url 'task-update' task.pk %}">✏️</a>
+        <a href="{% url 'task-delete' task.pk %}">🗑️</a>
+
         {% endfor %}
     </ul>
 
