@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from .models import Task
 from django.contrib.auth.decorators import login_required
 from .forms import TaskForms
+from django.contrib.auth import authenticate, login
 
 
 def home(request):
     return render(request, 'home.html')
 
 
-@login_required
+@login_required(login_url='/login/')
 def task_list(request):
     tasks = Task.objects.filter(user=request.user)
     context = {'task_list':tasks}
@@ -47,3 +48,20 @@ def task_delete(request, pk):
         delete_task.delete()
         return redirect('task-list')
     return render(request, 'task_confirm_delete.html', {'task': delete_task})
+
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+            else:
+                return redirect('home')
+    return render(request, 'login.html')
+
